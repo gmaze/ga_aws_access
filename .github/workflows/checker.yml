@@ -2,8 +2,7 @@ name: S3 from GA
 
 on:
   push:
-    branches:
-      - master
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
