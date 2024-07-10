@@ -35,7 +35,6 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4.0.2
         with:
           aws-region: us-west-1
-          id-token: write
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ci-tests-ga-argopy-01
 
       - name: Set environment variables
