@@ -152,7 +152,13 @@ Configuring OpenID Connect in Amazon Web Services ([I followed this procedure](h
 
 ### Procedure on AWS
 
-- [ ] [Create the OIDC provider](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html#manage-oidc-provider-console). you can [check the IAM identity providers here](https://us-east-1.console.aws.amazon.com/iam/home#/identity_providers).
+- [ ] [Create the OIDC provider](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html#manage-oidc-provider-console):
+  - Go to https://us-east-1.console.aws.amazon.com/iam/home#/identity_providers/create and: 
+    - select OpenID Connect,
+    - use `https://token.actions.githubusercontent.com` as a provider URL,
+    - use `sts.amazonaws.com` as the Audience.
+
+  - You can then [check IAM identity providers here](https://us-east-1.console.aws.amazon.com/iam/home#/identity_providers).
 
 - [ ] Configure a role and trust policy ([this is for a third-party Id provider and API](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp.html#roles-creatingrole-identityprovider-api)).
 
