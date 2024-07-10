@@ -146,3 +146,8 @@ Use the Action [configure-aws-credentials](https://github.com/aws-actions/config
 
 But I don't quite understand the set-up using OpenID Connect (OIDC).
 
+We need to *use GitHub's OIDC provider in conjunction with a configured AWS IAM Identity Provider endpoint*.
+
+The GitHub's OIDC provider is a method to get short-lived credentials needed for Github Actions.
+
+When using OIDC, you configure IAM to accept JWTs from GitHub's OIDC endpoint. This action will then create a JWT unique to the workflow run using the OIDC endpoint, and it will use the JWT to assume the specified role with short-term credentials
