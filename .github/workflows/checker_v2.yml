@@ -1,0 +1,68 @@
+name: Use aws-actions
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  check:
+
+    name: Py${{matrix.python-version}} - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash -l {0}
+    continue-on-error: ${{ matrix.experimental }}
+    timeout-minutes: 45
+    strategy:
+      max-parallel: 12
+      fail-fast: false
+      matrix:
+        python-version: ["3.9"]
+        os: ["ubuntu-latest"]
+        experimental: [false]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Configure AWS Credentials"
+        uses: aws-actions/configure-aws-credentials@v4.0.2
+
+      - name: Set environment variables
+        run: |
+          echo "CONDA_ENV_FILE=requirements/py${{matrix.python-version}}-all-pinned.yml" >> $GITHUB_ENV
+          echo "PYTHON_VERSION=${{matrix.python-version}}" >> $GITHUB_ENV
+          echo "LOG_FILE=Py${{matrix.python-version}}-${{matrix.os}}.log" >> $GITHUB_ENV
+
+      - name: Setup Micromamba ${{ matrix.python-version }}
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-name: aws-tests-ga
+          environment-file: ${{ env.CONDA_ENV_FILE }}
+          init-shell: bash
+          cache-environment: true
+          cache-environment-key: "${{runner.os}}-${{runner.arch}}-py${{matrix.python-version}}-${{env.TODAY}}-${{hashFiles(env.CONDA_ENV_FILE)}}"
+          create-args: >-
+            python=${{matrix.python-version}}
+
+      - name: Version info
+        run: |
+          micromamba info
+          micromamba list
+
+      - name: Sample script
+        run: |
+          python sample_script.py
+
+      - name: Upload tests log to GA
+        uses: actions/upload-artifact@v4
+        with:
+          name: Argopy-Tests-All-${{matrix.python-version}}-${{matrix.os}}
+          path: ${{env.LOG_FILE}}
+          retention-days: 90
