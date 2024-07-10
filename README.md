@@ -157,10 +157,13 @@ This is the procedure:
 - [x] Configure a role and trust policy ([this is for a third-party Id provider and API](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp.html#roles-creatingrole-identityprovider-api)).
 
   - Go to https://us-east-1.console.aws.amazon.com/iam/home#/roles/create and select **Web indentity** as a Trusted entity type, further select the Identitry provider you created at the previous step (should be named "token.actions.githubusercontent.com"):
+![Screenshot 2024-07-10 at 14 12 15](https://github.com/gmaze/ga_aws_access/assets/1956032/c53650be-6768-48b9-9723-d310bc42ef46)
 
   - Then check the **AmazonS3ReadOnlyAccess** policy name:
+![Screenshot 2024-07-10 at 14 13 54](https://github.com/gmaze/ga_aws_access/assets/1956032/983a8267-9ffa-4fcc-b9b1-09d657a93db4)
 
   - Give the role a name and a description: 
+![Screenshot 2024-07-10 at 14 15 39](https://github.com/gmaze/ga_aws_access/assets/1956032/4ffe7818-5559-4928-be65-5f7015fe62b0)
 
   - The resulting trust policy is:
     ```json
