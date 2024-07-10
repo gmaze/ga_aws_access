@@ -144,10 +144,14 @@ This is not recommended though.
 
 Use the Action [configure-aws-credentials](https://github.com/aws-actions/configure-aws-credentials).
 
-But I don't quite understand the set-up using OpenID Connect (OIDC).
-
 We need to *use GitHub's OIDC provider in conjunction with a configured AWS IAM Identity Provider endpoint*.
 
-The GitHub's OIDC provider is a method to get short-lived credentials needed for Github Actions.
+The GitHub's OIDC provider is a method to get short-lived credentials needed for Github Actions (JWT).
 
 When using OIDC, you configure IAM to accept JWTs from GitHub's OIDC endpoint. This action will then create a JWT unique to the workflow run using the OIDC endpoint, and it will use the JWT to assume the specified role with short-term credentials
+
+Configuring OpenID Connect in Amazon Web Services ([I followed this procedure](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services)):
+
+- [x] [Create the OIDC provider on AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html#manage-oidc-provider-console). [Check IAM identuty providers here](https://us-east-1.console.aws.amazon.com/iam/home#/identity_providers) 
+
+- [x] Configure a role and trust policy ([this is for a third-party Id provider](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp.html)). [Check create role here](https://us-east-1.console.aws.amazon.com/iam/home#/roles/details/ci-tests-ga-argopy-01?section=permissions)
