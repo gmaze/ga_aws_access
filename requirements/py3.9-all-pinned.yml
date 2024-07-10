@@ -1,4 +1,4 @@
-name: argopy-tests
+name: aws-tests-ga
 channels:
   - conda-forge
 dependencies:
