@@ -215,3 +215,11 @@ Configuring OpenID Connect in Amazon Web Services ([I followed this procedure](h
             aws-region: us-west-1
             role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ci-tests-ga-argopy-01
   ```
+  
+- [ ] don't foget to give your workflow the appropriate permissions:
+  ```yaml
+  permissions:
+    id-token: write
+    contents: read
+  ```
+  
