@@ -33,6 +33,8 @@ jobs:
 
       - name: "Configure AWS Credentials"
         uses: aws-actions/configure-aws-credentials@v4.0.2
+        with:
+          aws-region: us-west-1
 
       - name: Set environment variables
         run: |
