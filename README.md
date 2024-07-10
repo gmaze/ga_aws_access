@@ -144,14 +144,48 @@ This is not recommended though.
 
 Use the Action [configure-aws-credentials](https://github.com/aws-actions/configure-aws-credentials).
 
-We need to *use GitHub's OIDC provider in conjunction with a configured AWS IAM Identity Provider endpoint*.
-
-The GitHub's OIDC provider is a method to get short-lived credentials needed for Github Actions (JWT).
+We need to use GitHub's OIDC provider in conjunction with a configured AWS IAM Identity Provider endpoint to get short-lived credentials (JWT).
 
 When using OIDC, you configure IAM to accept JWTs from GitHub's OIDC endpoint. This action will then create a JWT unique to the workflow run using the OIDC endpoint, and it will use the JWT to assume the specified role with short-term credentials
 
 Configuring OpenID Connect in Amazon Web Services ([I followed this procedure](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services)):
 
-- [x] [Create the OIDC provider on AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html#manage-oidc-provider-console). [Check IAM identuty providers here](https://us-east-1.console.aws.amazon.com/iam/home#/identity_providers) 
+This is the procedure:
 
-- [x] Configure a role and trust policy ([this is for a third-party Id provider](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp.html)). [Check create role here](https://us-east-1.console.aws.amazon.com/iam/home#/roles/details/ci-tests-ga-argopy-01?section=permissions)
+- [x] [Create the OIDC provider on AWS](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html#manage-oidc-provider-console). [Check IAM identity providers here](https://us-east-1.console.aws.amazon.com/iam/home#/identity_providers).
+
+- [x] Configure a role and trust policy ([this is for a third-party Id provider and API](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp.html#roles-creatingrole-identityprovider-api)).
+
+  - Go to https://us-east-1.console.aws.amazon.com/iam/home#/roles/create and select **Web indentity** as a Trusted entity type, further select the Identitry provider you created at the previous step (should be named "token.actions.githubusercontent.com"):
+
+  - Then check the **AmazonS3ReadOnlyAccess** policy name:
+
+  - Give the role a name and a description: 
+
+  - The resulting trust policy is:
+    ```json
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Principal": {
+                    "Federated": "arn:aws:iam::************:oidc-provider/token.actions.githubusercontent.com"
+                },
+                "Action": "sts:AssumeRoleWithWebIdentity",
+                "Condition": {
+                    "StringEquals": {
+                        "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+                    },
+                    "StringLike": {
+                        "token.actions.githubusercontent.com:sub": "repo:euroargodev/argopy:*"
+                    }
+                }
+            }
+        ]
+    }
+    ```
+
+    - Extract from the **Federated** property the little ID number (`************`, should be 12 digits).
+
+- [Check created roles here](https://us-east-1.console.aws.amazon.com/iam/home#/roles/details/ci-tests-ga-argopy-01?section=permissions).
