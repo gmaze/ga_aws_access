@@ -157,6 +157,7 @@ Configuring OpenID Connect in Amazon Web Services ([I followed this procedure](h
     - select OpenID Connect,
     - use `https://token.actions.githubusercontent.com` as a provider URL,
     - use `sts.amazonaws.com` as the Audience.
+![Screenshot 2024-07-10 at 14 35 49](https://github.com/gmaze/ga_aws_access/assets/1956032/495cc69e-63b8-44c3-8143-5ccd571e2435)
 
   - You can then [check IAM identity providers here](https://us-east-1.console.aws.amazon.com/iam/home#/identity_providers).
 
