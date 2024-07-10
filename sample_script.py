@@ -7,8 +7,12 @@ if __name__ == "__main__":
     print("\n", "="*40, "Create boto3 client", "\n")
     # fs = boto3.client('s3', config=Config(signature_version=UNSIGNED))
     fs = boto3.client('s3')
-    access_key = fs._request_signer._credentials.get_frozen_credentials().access_key
-    print("Found AWS Credentials for access_key='%s'" % access_key)
+
+    try:
+        access_key = fs._request_signer._credentials.get_frozen_credentials().access_key
+        print("Found AWS Credentials for access_key='%s'" % access_key)
+    except:
+        print("No AWS Credentials found")
 
     # List the object:
     # Work with UNSIGNED client
